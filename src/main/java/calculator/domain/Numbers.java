@@ -16,7 +16,18 @@ public final class Numbers {
     public int sum() {
         int total = 0;
         for (final String token : tokens) {
-            total += Integer.parseInt(token);
+            try {
+                int value = Integer.parseInt(token);
+
+                //음수 처리
+                if (value < 0) {
+                    throw new IllegalArgumentException("음수는 허용되지 않습니다.");
+                }
+
+                total += value;
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("잘못된 숫자 형식입니다.");
+            }
         }
         return total;
     }

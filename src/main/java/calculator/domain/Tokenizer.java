@@ -3,17 +3,26 @@ package calculator.domain;
 public final class Tokenizer {
 
     //기본 구분자 패턴
-    private static final String DEFAULT_PATTERN = "[,:]";
+    private static final String DEFAULT_PATTERN = "[,:]"; // 기본 구분자 (, :)
 
     public String[] split(final String input) {
         //커스텀 구분자 처리
         if (input.startsWith("//")) {
-            //구분자 추출
             int newlineIndex = input.indexOf("\\n");
-            //TODO: 입력형식 오류 시 예외처리
+
+            if (newlineIndex == -1 || newlineIndex <= 2) {
+                throw new IllegalArgumentException("잘못된 커스텀 구분자 형식입니다.");
+            }
 
             String customDelimiter = input.substring(2, newlineIndex);
+            if (customDelimiter.isEmpty()) {
+                throw new IllegalArgumentException("커스텀 구분자가 비어 있습니다.");
+            }
+
             String numbers = input.substring(newlineIndex + 2);
+            if (numbers.isEmpty()) {
+                throw new IllegalArgumentException("구분자 뒤에 숫자가 없습니다.");
+            }
 
             return numbers.split(customDelimiter);
         }
